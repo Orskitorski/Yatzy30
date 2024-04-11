@@ -1,17 +1,80 @@
-// Press Shift twice to open the Search Everywhere dialog and type `show whitespaces`,
-// then press Enter. You can now see whitespace characters in your code.
+import java.util.Arrays;
+import java.util.Scanner;
+
 public class Main {
     public static void main(String[] args) {
-        // Press Alt+Enter with your caret at the highlighted text to see how
-        // IntelliJ IDEA suggests fixing it.
-        System.out.printf("Hello and welcome!");
+            Scanner tgb = new Scanner(System.in);
+            System.out.println("Hur många spelare ska vara med?");
+            StartGame(tgb.nextInt());
+    }
 
-        // Press Skift+F10 or click the green arrow button in the gutter to run the code.
-        for (int i = 1; i <= 5; i++) {
-
-            // Press Skift+F9 to start debugging your code. We have set one breakpoint
-            // for you, but you can always add more by pressing Ctrl+F8.
-            System.out.println("i = " + i);
+    public static void StartGame(int playerCount) {
+        System.out.println("Spelet har startat, varje spelare får välja ett spelarnummer mellan 1 och " + playerCount);
+        Scanner tgb = new Scanner(System.in);
+        int[] playerPoints = new int[playerCount];
+        for (int i = 0; i < playerCount; i++) {
+            playerPoints[i] = 30;
         }
+        for (int i = 0; i < playerCount; i++) {
+            if (playerPoints[i] > 0) {
+                int playerNumber = i + 1;
+                System.out.println("Spelare " + playerNumber + ":s tur. Deras poäng är: " + playerPoints[i]);
+                int Score = Dice();
+                System.out.println(Score);
+                if (Score < 30) {
+                    playerPoints[i] -= 30-Score;
+                    System.out.println("Spelare " + playerNumber + ":s poäng är: " + playerPoints[i]);
+                }
+                if (Score > 30) {
+                    System.out.println("Du förlorar 0 poäng. Vilken spelare vill du attackera? (skriv in numret på spelaren du vill attackera)");
+                    int attackPlayer = tgb.nextInt() - 1;
+                    int targetDice = Score - 30;
+                    int damage = Attack(targetDice);
+                    playerPoints[attackPlayer] -= damage;
+                }
+            }
+        }
+    }
+
+    public static int Dice() {
+        Scanner tgb = new Scanner(System.in);
+        int[] diceArray = new int[6];
+        int[] playerDiceArray = new int[6];
+
+        System.out.println("klicka på enter för att slå tärningarna");
+        String temp;
+        temp = tgb.nextLine();
+        for (int diceNumber = 6; diceNumber > 0; ) {
+            for (int i = 0; i < diceNumber; i++) {
+                diceArray[i] = (int) ((Math.random() * 6) + 1);
+                System.out.println(diceArray[i]);
+            }
+            System.out.println("Hur många tärningar vill du välja ut? (minst 1)");
+            int playerDiceNumber = tgb.nextInt();
+            Arrays.sort(diceArray);
+
+            int y = diceNumber-1;
+            for (int i = diceNumber-1; i >= 0; i--) {
+                playerDiceArray[i] = diceArray[y];
+                y--;
+            }
+            diceNumber -= playerDiceNumber;
+        }
+        for (int i = 0; i < 6; i++) {
+            System.out.println(playerDiceArray[i]);
+        }
+        int sum = 0;
+        for (int i = 0; i < 6; i++) {
+            sum += playerDiceArray[i];
+        }
+        return sum;
+    }
+
+    public static int Attack(int targetDice) {
+        Scanner tgb = new Scanner(System.in);
+        System.out.println("Du måste få tärningar med numret: " + targetDice + ". Tryck enter för att slå tärningarna.");
+        String temp;
+        temp = tgb.nextLine();
+        return 0;
     }
 }
