@@ -3,39 +3,49 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-            Scanner tgb = new Scanner(System.in);
-            System.out.println("Hur många spelare ska vara med?");
-            int winningPlayer = StartGame(tgb.nextInt());
-            System.out.println("Spelare " + winningPlayer + " är vinnaren!");
+        Scanner tgb = new Scanner(System.in);
+        System.out.println("Hur många spelare ska vara med?");
+        int playerCount = tgb.nextInt();
+        String[] playerNames = new String[playerCount];
+        for (int i = 0; i < playerCount; i++) {
+            System.out.println("Vad ska spelare " + (i+1) + " heta?");
+            playerNames[i] = tgb.next();
+        }
+        String winningPlayer = StartGame(playerCount, playerNames);
+        System.out.println("Spelare " + winningPlayer + " är vinnaren!");
     }
 
-    public static int StartGame(int playerCount) {
-        System.out.println("Spelet har startat, varje spelare får välja ett spelarnummer mellan 1 och " + playerCount);
+    public static String StartGame(int playerCount, String[] playerNames) {
         Scanner tgb = new Scanner(System.in);
         int[] playerPoints = new int[playerCount];
         int numberOfPlayersAlive = playerCount;
-        for (int i = 0; i < playerCount; i++) {
-            playerPoints[i] = 30;
-        }
+        Arrays.fill(playerPoints, 30);
         while (numberOfPlayersAlive > 1) {
             for (int i = 0; i < playerCount; i++) {
                 if (playerPoints[i] > 0) {
-                    int playerNumber = i + 1;
-                    System.out.println("Spelare " + playerNumber + ":s tur. Deras poäng är: " + playerPoints[i]);
+                    System.out.println(playerNames[i] + ":s tur. Deras poäng är: " + playerPoints[i]);
                     int Score = Dice();
                     System.out.println(Score);
                     if (Score < 30) {
                         playerPoints[i] -= 30-Score;
-                        System.out.println("Spelare " + playerNumber + ":s poäng är: " + playerPoints[i]);
+                        System.out.println(playerNames[i] + ":s poäng är: " + playerPoints[i]);
                         if (playerPoints[i] <= 0) {
                             numberOfPlayersAlive -= 1;
                             break;
                         }
                     }
+                    if (Score == 30) {
+                        System.out.println("Du förlorar 0 poäng");
+                    }
                     if (Score > 30) {
-                        System.out.println("Du förlorar 0 poäng. Vilken spelare vill du attackera? (skriv in numret på spelaren du vill attackera)");
-                        int targetPlayer = tgb.nextInt();
-                        int programTargetPlayer = targetPlayer - 1;
+                        System.out.println("Du förlorar 0 poäng. Vilken spelare vill du attackera? (skriv in namnet på spelaren du vill attackera)");
+                        String targetPlayer = tgb.nextLine();
+                        int programTargetPlayer = 0;
+                        for (int j = 0; j < playerCount; j++) {
+                            if ((playerNames[j].toLowerCase()).contains(targetPlayer.toLowerCase())) {
+                                programTargetPlayer = j;
+                            }
+                        }
                         int targetDice = Score - 30;
                         int damage = Attack(targetDice);
                         playerPoints[programTargetPlayer] -= damage;
@@ -48,10 +58,10 @@ public class Main {
                 }
             }
         }
-        int winningPlayer = 0;
+        String winningPlayer = null;
         for (int i = 0; i < playerCount; i++) {
             if (playerPoints[i] > 0) {
-                winningPlayer += i + 1;
+                winningPlayer = playerNames[i];
             }
         }
         return winningPlayer;
