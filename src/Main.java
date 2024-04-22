@@ -113,16 +113,16 @@ public class Main {
         return sum; //Returnerar summan som används i StartGame-metoden
     }
 
-    public static int Attack(int targetDice) { //Denna fungerar inte som den ska
+    public static int Attack(int targetDice) {
         Scanner tgb = new Scanner(System.in);
-        int[] diceArray = new int[6];
+        int[] diceArray = new int[6]; //Skapar en array som håller i alla tärningar
         int sum = 0;
         System.out.println("Du måste få tärningar med numret: " + targetDice + ". Tryck enter för att slå tärningarna.");
         String temp;
-        temp = tgb.nextLine();
+        temp = tgb.nextLine(); //Variabel som dröjer programmet tills spelaren trycker på enter eller gör en annan input
         boolean targetDiceFound = true;
 
-        while (targetDiceFound) {
+        while (targetDiceFound) { //kör bara koden om targetDiceFound är = true
             for (int diceNumber = 6; diceNumber > 0; ) {
                 System.out.println("[nr:   1|2|3|4|5|6 ]");
                 System.out.println("[------------------]");
@@ -136,31 +136,28 @@ public class Main {
                 System.out.println(" ");
                 System.out.println(" ");
 
-                int foundTargetDice = 0;
+                int foundTargetDice = 0; //Skapar variabel som håller koll på om programmet hittar rätt tärningar
 
-                for (int i = 0; i < diceNumber; i++) {
+                for (int i = 0; i < diceNumber; i++) { //For-loop som kollar om programmet hittar rätt tärning i arrayen
                     if (diceArray[i] == targetDice) {
-                        targetDiceFound = true;
                         foundTargetDice++;
                         break;
                     }
                 }
 
-                if (foundTargetDice == 0) {
+                if (foundTargetDice == 0) { //If-sats som avbryter while-loopen om programmet inte hittar rätt tärning i arrayen
                     targetDiceFound = false;
                     break;
                 }
 
-                if (targetDiceFound) {
-                    for (int i = 0; i < diceNumber; i++) {
-                        if (diceArray[i] == targetDice) {
-                            sum += targetDice;
-                            diceNumber--;
-                        }
+                for (int i = 0; i < diceNumber; i++) { //For-loop som summerar alla de rätta tärningarna som hittats
+                    if (diceArray[i] == targetDice) {
+                        sum += targetDice;
+                        diceNumber--;
                     }
                 }
             }
         }
-        return sum;
+        return sum; //Returnerar värdet som ska användas som skada som den attackerade spelaren tar
     }
 }
