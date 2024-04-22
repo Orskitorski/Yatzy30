@@ -91,29 +91,29 @@ public class Main {
             int playerDiceNumber = tgb.nextInt(); //Tar spelarens input som mängden tärningar de vill välja ut
 
             System.out.println("Skriv vilken tärning du vill ha följt av enter");
-            for (int i = 0; i < playerDiceNumber; i++) {
-                int diceNumberChoice = (tgb.nextInt()-1);
+            for (int i = 0; i < playerDiceNumber; i++) { //Låter spelaren välja så många tärningar som de bestämde sig för att välja förut
+                int diceNumberChoice = (tgb.nextInt()-1); //Läser in spelarens tärningsval (tärning 1, 2, 3, 4, 5 eller 6
                 for (int j = 0; j < diceNumber; j++) {
-                    playerDiceArray[j] = diceArray[diceNumberChoice];
+                    playerDiceArray[j] = diceArray[diceNumberChoice]; //Sätter in spelarens valda tärningar i spelarens tärningsarray
                 }
                 diceNumber--;
             }
         }
 
         System.out.print("[");
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < 6; i++) { //Skriver ut spelarens tärningsarray
             System.out.print(playerDiceArray[i]);
             System.out.print(",");
         }
         System.out.print("]");
         int sum = 0;
         for (int i = 0; i < 6; i++) {
-            sum += playerDiceArray[i];
+            sum += playerDiceArray[i]; //Räknar ut summan av spelarens tärningar
         }
-        return sum;
+        return sum; //Returnerar summan som används i StartGame-metoden
     }
 
-    public static int Attack(int targetDice) {
+    public static int Attack(int targetDice) { //Denna fungerar inte som den ska
         Scanner tgb = new Scanner(System.in);
         int[] diceArray = new int[6];
         int sum = 0;
@@ -121,6 +121,7 @@ public class Main {
         String temp;
         temp = tgb.nextLine();
         boolean targetDiceFound = true;
+
         while (targetDiceFound) {
             for (int diceNumber = 6; diceNumber > 0; ) {
                 System.out.println("[nr:   1|2|3|4|5|6 ]");
@@ -134,13 +135,20 @@ public class Main {
                 System.out.print("]");
                 System.out.println(" ");
                 System.out.println(" ");
+
+                int foundTargetDice = 0;
+
                 for (int i = 0; i < diceNumber; i++) {
                     if (diceArray[i] == targetDice) {
                         targetDiceFound = true;
+                        foundTargetDice++;
+                        break;
                     }
-                    else {
-                        targetDiceFound = false;
-                    }
+                }
+
+                if (foundTargetDice == 0) {
+                    targetDiceFound = false;
+                    break;
                 }
 
                 if (targetDiceFound) {
@@ -148,7 +156,6 @@ public class Main {
                         if (diceArray[i] == targetDice) {
                             sum += targetDice;
                             diceNumber--;
-                            targetDiceFound = false;
                         }
                     }
                 }
